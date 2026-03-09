@@ -33,7 +33,7 @@ async fn wp_login(log: &str, pwd: &str) -> Result<String, Box<dyn Error>> {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    for i in 1..50 {
+    for _i in 1..50 {
         let result = wp_login("admin", "123456").await?;
         println!("{:?}", result);
     }
