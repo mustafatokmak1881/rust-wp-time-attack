@@ -2,7 +2,7 @@ use reqwest::Client;
 use reqwest::header::{HeaderMap, USER_AGENT};
 use std::error::Error;
 
-async fn wp_login(log: &str, pwd: &str) -> Result<bool, Box<dyn Error>> {
+async fn wp_login(log: &str, pwd: &str) -> Result<String, Box<dyn Error>> {
     let client: Client = Client::builder().cookie_store(true).build()?;
 
     let mut headers: HeaderMap = HeaderMap::new();
@@ -25,13 +25,13 @@ async fn wp_login(log: &str, pwd: &str) -> Result<bool, Box<dyn Error>> {
 
     let success: bool = response.url().path().contains("wp-admin");
 
-    Ok(success)
+    Ok(format!("{}:{} {}", log, pwd, success))
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let result = wp_login("admin", "123456").await?;
-    println!("Result: {:?}", result);
+    println!("{:?}", result);
 
     Ok(())
 }
