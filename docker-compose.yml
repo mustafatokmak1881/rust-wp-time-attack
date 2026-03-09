@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb:10.11 # MySQL'in daha performanslı alternatifi
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppassword
+
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "8080:80" # Tarayıcıdan 8080 portuyla erişeceğiz
+    volumes:
+      - wp_data:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+  wp_data:
